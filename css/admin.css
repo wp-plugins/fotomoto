@@ -1,0 +1,26 @@
+.checkboxes label {
+  display: block;
+  float: left;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+.checkboxes input {
+  vertical-align: middle;
+}
+
+.checkboxes label span {
+  vertical-align: middle;
+}
+
+.ui-tabs .ui-tabs-hide {
+  display: none;
+}
+.ui-widget { 
+  font-family:"Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+  font-size:13px;
+}
+
+.ui-widget-content a {
+  color:#21759B;
+}
