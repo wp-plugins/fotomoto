@@ -43,7 +43,7 @@ $domain = fotomoto_user_domain($user_object->user_login);
 <input type="hidden" name="act" value="edit" />
 <p class="submit">
 <input type="submit" class="button-primary" value="<?php _e('Get Site Key') ?>" />
-<input type="button" class="button-secondary" value="<?php _e('Go Back') ?>" onclick="window.location='/wp-admin/options-general.php?page=fotomoto#users_div'" />
+<input type="button" class="button-secondary" value="<?php _e('Go Back') ?>" onclick="window.location='<?php echo WP_FOTOMOTO_PLUGIN_ADMIN_URL ?>#users_div'" />
 </p>
 </form>
 </div>

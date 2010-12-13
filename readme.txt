@@ -4,7 +4,7 @@ Tags: fotomoto, ecommerce, sell, image, photo, picture
 Requires at least: 1.5
 Tested up to: 2.9.1
 Stable tag: 2.9.2
-Version: 1.1.0
+Version: 1.1.1
 
 Enables Fotomoto on all pages.
 
@@ -26,11 +26,13 @@ For more information visit:
 
 == Change Log ==
 
+= 1.1.1 =
+* Fix plugin update data when wordpress is installed in sub-directory
+
 = 1.1.0 =
 * Redesign plugin
 * Add Multiuser mode
 * Add exclusive categories and pages
-
 
 = 0.1.8 =
 * Fix for NextGen gallery integration

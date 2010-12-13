@@ -19,7 +19,7 @@
     <div id="settings_div">
       <h3> SETTINGS </h3>
       <h4>To enable the plugin, enter your Fotomoto Site key which is found by logging into your <a href="http://my.fotomoto.com" target="_blank">Dashboard</a>, and going to Site > Settings and clicking "Site Key"</h4>
-      <form method="post" id="fotomoto_form" action="/wp-admin/options-general.php?page=fotomoto" method="post">
+      <form method="post" id="fotomoto_form" action="<?php echo WP_FOTOMOTO_PLUGIN_ADMIN_URL ?>" method="post">
       <?php wp_nonce_field('update-options'); ?>
       <?php settings_fields('fotomoto'); ?>
       
@@ -76,7 +76,7 @@
     <div id="pages_div">
       <h3>PAGES</h3>
       <h4>Enable and Disable the Fotomoto Buy Button(s) on entire Pages</h4>
-      <form method="post" id="fotomoto_pages_form" action="/wp-admin/options-general.php?page=fotomoto#pages_div" method="post">
+      <form method="post" id="fotomoto_pages_form" action="<?php echo WP_FOTOMOTO_PLUGIN_ADMIN_URL ?>#pages_div" method="post">
       <?php wp_nonce_field('update-options'); ?>
       <table class="widefat fixed" cellspacing="0">
       <thead>
@@ -122,7 +122,7 @@
     <div id="categories_div">
       <h3>CATEGORIES</h3>
       <h4>Enable and Disable the Fotomoto Buy Button(s) across entire Categories</h4>
-      <form method="post" id="fotomoto_pages_form" action="/wp-admin/options-general.php?page=fotomoto#categories_div" method="post">
+      <form method="post" id="fotomoto_pages_form" action="<?php echo WP_FOTOMOTO_PLUGIN_ADMIN_URL ?>#categories_div" method="post">
       <?php wp_nonce_field('update-options'); ?>
       <table class="widefat fixed" cellspacing="0">
       <thead>
@@ -208,19 +208,19 @@
         if (!$site_key) {
         	$old_site_key = get_user_meta($user_object->ID, "old_fotomoto_site_key", true);
         	if (!$old_site_key) {
-        		$site_key = "Not Activate [<a href='/wp-admin/options-general.php?page=fotomoto&act=edit&user_id=$user_object->ID'>Activate</a>]";
+        		$site_key = "Not Activate [<a href='".WP_FOTOMOTO_PLUGIN_ADMIN_URL."&act=edit&user_id=$user_object->ID'>Activate</a>]";
         	}
         	else {
-        		$site_key = "Not Activate [<a href='/wp-admin/options-general.php?page=fotomoto&act=reactivate&user_id={$user_object->ID}#users_div'>Activate</a>]";
+        		$site_key = "Not Activate [<a href='".WP_FOTOMOTO_PLUGIN_ADMIN_URL."&act=reactivate&user_id={$user_object->ID}#users_div'>Activate</a>]";
         	}
         }
-        else $site_key .= "&nbsp;[<a href='/wp-admin/options-general.php?page=fotomoto&act=delete&user_id=$user_object->ID#users_div'>Deactivate</a>]";
+        else $site_key .= "&nbsp;[<a href='".WP_FOTOMOTO_PLUGIN_ADMIN_URL."&act=delete&user_id=$user_object->ID#users_div'>Deactivate</a>]";
         echo "\n\t", "<tr $style><td class='username column-username'>$avatar <strong>$user_object->user_login</strong></td><td class='name column-name'>$user_object->first_name $user_object->last_name</td><td class='email column-email'><a href='mailto:$email' title='" . sprintf( __('E-mail: %s' ), $email ) . "'>$email</a></td><td class='name column-name'>$site_key</td></tr>";
       }
       ?>
       </tbody>
       </table>
-      <form method="post" id="fotomoto_pages_form" action="/wp-admin/options-general.php?page=fotomoto#users_div" method="post">
+      <form method="post" id="fotomoto_pages_form" action="<?php echo WP_FOTOMOTO_PLUGIN_ADMIN_URL ?>#users_div" method="post">
       <input type="hidden" name="action" value="update" />
       <input type="hidden" name="act" value="activate_all" />
       <p class="submit">

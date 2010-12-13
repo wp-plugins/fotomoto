@@ -3,11 +3,11 @@
 Plugin Name: Fotomoto
 Plugin URI: http://www.fotomoto.com
 Description: Fotomoto Plugin
-Version: 1.1.0
+Version: 1.1.1
 Author: Fotomoto
 Author URI: http://www.fotomoto.com/
 */
-define('FOTOMOTO_VERSION', '1.1.0');
+define('FOTOMOTO_VERSION', '1.1.1');
 
 if (!defined('WP_CONTENT_URL'))
       define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
@@ -22,6 +22,8 @@ if (!defined('WP_FOTOMOTO_PLUGIN_URL'))
       define('WP_FOTOMOTO_PLUGIN_URL', WP_CONTENT_URL.'/plugins/fotomoto');      
 if (!defined('WP_FOTOMOTO_PLUGIN_DIR'))
       define('WP_FOTOMOTO_PLUGIN_DIR', WP_CONTENT_DIR.'/plugins/fotomoto');
+if (!defined('WP_FOTOMOTO_PLUGIN_ADMIN_URL'))
+      define('WP_FOTOMOTO_PLUGIN_ADMIN_URL', get_option('siteurl').'/wp-admin/options-general.php?page=fotomoto');      
 
 define("FOTOMOTO_ENABLED", "enabled");
 define("FOTOMOTO_DISABLED", "disabled");
@@ -337,7 +339,7 @@ function fotomoto() {
 	if (isset($_GET["fotomoto_debug"])) {
 ?>
 <!--
-VERSION: 0.0.1
+VERSION: 1.1.1
 
 REQUEST URI: <?= $_SERVER["REQUEST_URI"] ?>
 
