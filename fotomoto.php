@@ -3,11 +3,11 @@
 Plugin Name: Fotomoto
 Plugin URI: http://www.fotomoto.com
 Description: Fotomoto Plugin
-Version: 1.1.1
+Version: 1.1.2
 Author: Fotomoto
 Author URI: http://www.fotomoto.com/
 */
-define('FOTOMOTO_VERSION', '1.1.1');
+define('FOTOMOTO_VERSION', '1.1.2');
 
 if (!defined('WP_CONTENT_URL'))
       define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
@@ -339,7 +339,7 @@ function fotomoto() {
 	if (isset($_GET["fotomoto_debug"])) {
 ?>
 <!--
-VERSION: 1.1.1
+VERSION: 1.1.2
 
 REQUEST URI: <?= $_SERVER["REQUEST_URI"] ?>
 
@@ -357,12 +357,13 @@ IS_FRONT_PAGE: <?= is_front_page() ?>
 	if (!fotomoto_is_scripted()) return;
 ?>
 <script type="text/javascript" src="<?php echo fotomoto_script(fotomoto_get_option('store_key'), $ext) ?>"></script>
-<noscript>If Javascript is disabled browser, to place orders please visit the page where I <a href="http://www.fotomoto.com/store/<?php echo fotomoto_get_option('store_key') ?>" target="_blank">sell my photos</a>, powered by <a href="http://www.fotomoto.com" target="_blank">Fotomoto</a>.</noscript>
+<noscript><p>If Javascript is disabled browser, to place orders please visit the page where I <a href="http://www.fotomoto.com/store/<?php echo fotomoto_get_option('store_key') ?>" rel="external nofollow">sell my photos</a>, powered by <a href="http://www.fotomoto.com" rel="external nofollow">Fotomoto</a>.</p></noscript>
 <?php 
 }
 
 function fotomoto_classes() {
   global $post;
+  if (fotomoto_get_option("enable_multiuser") == "") return "";
   if ($post) {
     $site_key = get_user_meta($post->post_author, "fotomoto_site_key", true);
     if (trim($site_key) != "") return "ftmt_id_$site_key";

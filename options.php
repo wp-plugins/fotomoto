@@ -34,7 +34,7 @@
       <table class="form-table">      
       <tr valign="top">
       <th class="checkboxes" scope="row">
-      <label for="enable_multiuser"><input type="checkbox" id="enable_multiuser" name="enable_multiuser" value="1" onchange="toggleMultiuserDetail(this)" <?php echo (fotomoto_get_option("enable_multiuser") != "" ? "checked" : "") ?>> <span>Enable Fotomoto Multiuser</span></label>
+      <label for="enable_multiuser"><input type="checkbox" id="enable_multiuser" name="enable_multiuser" value="1" onclick="toggleMultiuserDetail(this)" <?php echo (fotomoto_get_option("enable_multiuser") != "" ? "checked" : "") ?>> <span>Enable Fotomoto Multiuser</span></label>
       </th>
       <td>&nbsp;</td>
       </tr>
