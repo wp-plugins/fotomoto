@@ -2,8 +2,8 @@
 <h2>Fotomoto</h2>
 <h4 style="margin-top:0.2em">Manage your Fotomoto settings for your Wordpress site</h4><br/>
 <?php if ($message != "") { ?>
-<div class="updated fade" id="message" style="background-color: rgb(255, 251, 204);"><p><strong><?= $message ?></strong></p></div>
-<? 
+<div class="updated fade" id="message" style="background-color: rgb(255, 251, 204);"><p><strong><?php echo $message ?></strong></p></div>
+<?php 
 	$message = "";
 } 
 ?>
@@ -17,8 +17,8 @@
         <?php } ?>
     </ul>
     <div id="settings_div">
-      <h3> SETTINGS </h3>
-      <h4>To enable the plugin, enter your Fotomoto Site key which is found by logging into your <a href="http://my.fotomoto.com" target="_blank">Dashboard</a>, and going to Site > Settings and clicking "Site Key"</h4>
+      <h3> SETTINGS </h3>      
+      <h4>To enable the plugin, enter the site key from your <a href="http://my.fotomoto.com/">Fotomoto Dashboard</a>. For more information, please visit our <a href="http://support.fotomoto.com:/customer/portal/articles/8650-how-do-i-install-fotomoto-on-wordpress-">support page</a>.</h4>
       <form method="post" id="fotomoto_form" action="<?php echo WP_FOTOMOTO_PLUGIN_ADMIN_URL ?>" method="post">
       <?php wp_nonce_field('update-options'); ?>
       <?php settings_fields('fotomoto'); ?>
@@ -51,7 +51,7 @@
       </tr>
       
       <tr valign="top">
-      <th scope="row">Automatically Set Default Pricing:</th>
+      <th scope="row">Automatically set default pricing:</th>
       <td class="checkboxes"><label><input type="checkbox" id="use_default_pricing" name="use_default_pricing" value="1" <?php echo (fotomoto_get_option("use_default_pricing") != "" ? "checked" : "") ?>><span>&nbsp;</span></label></td>
       </tr>
       
@@ -61,7 +61,7 @@
       </tr>
       
       <tr valign="top">
-      <th scope="row">Automatically Active New Users:</th>
+      <th scope="row">Automatically activate new users:</th>
       <td class="checkboxes"><label><input type="checkbox" id="activate_new_user" name="activate_new_user" value="1" <?php echo (fotomoto_get_option("activate_new_user") != "" ? "checked" : "") ?>><span>&nbsp;</span></label></td>
       </tr>
       

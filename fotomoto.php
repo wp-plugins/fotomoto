@@ -3,11 +3,11 @@
 Plugin Name: Fotomoto
 Plugin URI: http://www.fotomoto.com
 Description: Fotomoto Plugin
-Version: 1.1.2
+Version: 1.1.3
 Author: Fotomoto
 Author URI: http://www.fotomoto.com/
 */
-define('FOTOMOTO_VERSION', '1.1.2');
+define('FOTOMOTO_VERSION', '1.1.3');
 
 if (!defined('WP_CONTENT_URL'))
       define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
@@ -62,7 +62,9 @@ function admin_init_fotomoto() {
 }
 
 function admin_menu_fotomoto() {
-  add_options_page('Fotomoto', 'Fotomoto', 8, 'fotomoto', 'options_page_fotomoto');
+  $page = add_options_page('Fotomoto', 'Fotomoto', 8, 'fotomoto', 'options_page_fotomoto');
+  add_action("admin_print_styles-$page", 'fotomoto_stylesheet', 1);
+  add_action("admin_print_scripts-$page", 'fotomoto_headscripts');
 }
 
 function fotomoto_update_category_meta($cat_id, $meta_key, $meta_value, $prev_value = '') {
@@ -157,7 +159,7 @@ function options_page_fotomoto() {
  			$page_id = str_replace("page_status_", "", $key);
  			fotomoto_update_page_status($page_id, $value);
  		}
- 		$message = "Pages status are updated."; 		
+ 		$message = "Page updated."; 		
  	};
  	
  	if ($_POST["act"] == "update_categories_status") {
@@ -166,7 +168,7 @@ function options_page_fotomoto() {
  			$category_id = str_replace("category_status_", "", $key);
  			fotomoto_update_category_meta($category_id, "fotomoto_enable_status", $value);
  		}
- 		$message = "Categories status are updated."; 		
+ 		$message = "Category updated."; 		
  	};
  	
  	if ($_POST["act"] == "activate_all") {
@@ -188,7 +190,7 @@ function options_page_fotomoto() {
   	$validated = true;
   	$message = "";
   	if (trim($_POST["store_key"]) != "" && strlen(trim($_POST["store_key"])) != 40) {
-			$message .= "Site Key must be 40-character long.<br/>";
+			$message .= "Site Key must be 40-characters long.<br/>";
 			$validated = false;
 		}
 		
@@ -198,7 +200,7 @@ function options_page_fotomoto() {
 		}
 		
 		if (trim($_POST["api_key"]) != "" && strlen(trim($_POST["api_key"])) != 40) {
-			$message .= "API Key must be 40-character long.<br/>";
+			$message .= "API Key must be 40-characters long.<br/>";
 			$validated = false;
 		}
 				
@@ -341,15 +343,15 @@ function fotomoto() {
 <!--
 VERSION: 1.1.2
 
-REQUEST URI: <?= $_SERVER["REQUEST_URI"] ?>
+REQUEST URI: <?php echo $_SERVER["REQUEST_URI"] ?>
 
-STORE KEY: <?= fotomoto_get_option('store_key') ?>
+STORE KEY: <?php echo fotomoto_get_option('store_key') ?>
 
-EXCLUSIVE LIST: <?= print_r(fotomoto_get_option("exclusive_list")) ?>
+EXCLUSIVE LIST: <?php echo print_r(fotomoto_get_option("exclusive_list")) ?>
 
-IS_HOME: <?= is_home() ?>
+IS_HOME: <?php echo is_home() ?>
 
-IS_FRONT_PAGE: <?= is_front_page() ?>
+IS_FRONT_PAGE: <?php echo is_front_page() ?>
 
 -->
 <?php
@@ -376,10 +378,7 @@ register_deactivation_hook(__FILE__, 'deactive_fotomoto');
 
 if (is_admin()) {
   add_action('admin_init', 'admin_init_fotomoto');
-  add_action('admin_menu', 'admin_menu_fotomoto');
-  add_action('admin_print_styles', 'fotomoto_stylesheet', 1);
-  add_action('admin_print_scripts', 'fotomoto_headscripts');
-  
+  add_action('admin_menu', 'admin_menu_fotomoto');    
 }
  
 function fotomoto_headscripts(){
