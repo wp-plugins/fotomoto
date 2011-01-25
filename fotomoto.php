@@ -3,11 +3,11 @@
 Plugin Name: Fotomoto
 Plugin URI: http://www.fotomoto.com
 Description: Fotomoto Plugin
-Version: 1.1.3
+Version: 1.1.4
 Author: Fotomoto
 Author URI: http://www.fotomoto.com/
 */
-define('FOTOMOTO_VERSION', '1.1.3');
+define('FOTOMOTO_VERSION', '1.1.4');
 
 if (!defined('WP_CONTENT_URL'))
       define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
@@ -48,6 +48,8 @@ function activate_fotomoto() {
 		);";
 		$wpdb->query($sql);
 	}
+	
+	update_option('fotomoto_options', fotomoto_default_options()); //initial default options
 }
 
 function deactive_fotomoto() {
@@ -219,7 +221,7 @@ function options_page_fotomoto() {
 
 function fotomoto_update_page_status($page_id, $value) {
 	if ($page_id == "home") {
-		fotomoto_set_option("home_enable", trim($value));
+		fotomoto_set_option("home_enabled", trim($value));
 	}
 	else {
 		update_post_meta($page_id, "fotomoto_enable_status", $value);
@@ -235,7 +237,7 @@ function options_page_fotomoto_site_key() {
 }
 
 function fotomoto_page_enabled($page_id) {
-	if ($page_id == "home") return (fotomoto_get_option("home_enable") != FOTOMOTO_DISABLED);
+	if ($page_id == "home") return (fotomoto_get_option("home_enabled") != FOTOMOTO_DISABLED);
 	return (get_post_meta($page_id, "fotomoto_enable_status", true) != FOTOMOTO_DISABLED);
 }
 
@@ -253,15 +255,14 @@ function fotomoto_default_options() {
   $default_options["use_default_pricing"] = "";
   $default_options["setup_auto_pickup"] = "";
   $default_options["activate_new_user"] = "";
-  $default_options["exclusive_list"] = array();
 	return $default_options;
 }
 
 function fotomoto_set_option($option_name, $option_value) {
 	$fotomoto_options = get_option('fotomoto_options');
 	if (!$fotomoto_options || !array_key_exists($option_name, $fotomoto_options)) {
-    	$fotomoto_options = fotomoto_default_options();
-    }
+		$fotomoto_options = fotomoto_default_options();
+	}
 	$fotomoto_options[$option_name] = $option_value;
 	update_option('fotomoto_options', $fotomoto_options);
 }
@@ -269,8 +270,8 @@ function fotomoto_set_option($option_name, $option_value) {
 function fotomoto_get_option($option_name) {
 	$fotomoto_options = get_option('fotomoto_options');
 	if (!$fotomoto_options || !array_key_exists($option_name, $fotomoto_options)) {
-    	$fotomoto_options = fotomoto_default_options();
-    }
+		$fotomoto_options = fotomoto_default_options();
+	}
 	return $fotomoto_options[$option_name];
 }
 
@@ -282,8 +283,6 @@ function fotomoto_save_options() {
 	fotomoto_set_option("use_default_pricing", trim($_POST["use_default_pricing"]));
 	fotomoto_set_option("setup_auto_pickup", trim($_POST["setup_auto_pickup"]));
 	fotomoto_set_option("activate_new_user", trim($_POST["activate_new_user"]));
-	$list = explode(",", trim($_POST["exclude_url"]));
-	fotomoto_set_option("exclusive_list", $list);
 }
 
 function fotomoto_curPageURL() {
@@ -307,23 +306,7 @@ function fotomoto_script($key, $ext="") {
 	return $url;
 }
 
-function fotomoto_is_scripted() {
-	global $post;
-	wp_reset_query();
-	if (fotomoto_get_option("store_key") == "") return false;
-	/*$list = fotomoto_get_option("exclusive_list");
-	$page_path = str_replace(site_url(), "", fotomoto_curPageURL());
-	foreach ($list as $item) {	
-		if ($item == "") continue;
-		if ($item == "/") {
-			if (is_front_page()) return false;
-			else continue;
-		}
-
-		if (strpos($page_path, $item) !== FALSE) return false;		
-	}*/
-	
-	if (is_front_page() && !fotomoto_page_enabled("home")) return false;
+function is_post_scripted($post) {	
 	if (get_post_meta($post->ID, "fotomoto_enable_status", true) == "") { // page enabled is not set, check category enabled		
 		foreach((get_the_category($post->ID)) as $category) { 
 			if (!fotomoto_category_enabled($category->cat_ID)) return false; // if there is a category disabled
@@ -332,8 +315,18 @@ function fotomoto_is_scripted() {
 	else {
 		return fotomoto_page_enabled($post->ID);
 	}
-	
 	return true;
+}
+
+function fotomoto_is_scripted() {
+	wp_reset_query();
+	
+	global $wp_query;	
+	$post = $wp_query->queried_object;
+	
+	if (fotomoto_get_option("store_key") == "") return false;		
+	if (is_front_page()) return fotomoto_page_enabled("home");
+	return is_post_scripted($post);		
 }
 
 
@@ -341,13 +334,11 @@ function fotomoto() {
 	if (isset($_GET["fotomoto_debug"])) {
 ?>
 <!--
-VERSION: 1.1.2
+VERSION: 1.1.4
 
 REQUEST URI: <?php echo $_SERVER["REQUEST_URI"] ?>
 
 STORE KEY: <?php echo fotomoto_get_option('store_key') ?>
-
-EXCLUSIVE LIST: <?php echo print_r(fotomoto_get_option("exclusive_list")) ?>
 
 IS_HOME: <?php echo is_home() ?>
 
@@ -365,6 +356,7 @@ IS_FRONT_PAGE: <?php echo is_front_page() ?>
 
 function fotomoto_classes() {
   global $post;
+  if (!is_post_scripted($post)) return "nofotomoto";
   if (fotomoto_get_option("enable_multiuser") == "") return "";
   if ($post) {
     $site_key = get_user_meta($post->post_author, "fotomoto_site_key", true);
