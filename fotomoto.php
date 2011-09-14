@@ -3,14 +3,14 @@
 Plugin Name: Fotomoto
 Plugin URI: http://www.fotomoto.com
 Description: Fotomoto Plugin
-Version: 1.1.4
+Version: 1.1.5
 Author: Fotomoto
 Author URI: http://www.fotomoto.com/
 */
-define('FOTOMOTO_VERSION', '1.1.4');
+define('FOTOMOTO_VERSION', '1.1.5');
 
 if (!defined('WP_CONTENT_URL'))
-      define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
+      define('WP_CONTENT_URL', site_url().'/wp-content');
 if (!defined('WP_CONTENT_DIR'))
       define('WP_CONTENT_DIR', ABSPATH.'wp-content');
 if (!defined('WP_PLUGIN_URL'))
@@ -23,7 +23,7 @@ if (!defined('WP_FOTOMOTO_PLUGIN_URL'))
 if (!defined('WP_FOTOMOTO_PLUGIN_DIR'))
       define('WP_FOTOMOTO_PLUGIN_DIR', WP_CONTENT_DIR.'/plugins/fotomoto');
 if (!defined('WP_FOTOMOTO_PLUGIN_ADMIN_URL'))
-      define('WP_FOTOMOTO_PLUGIN_ADMIN_URL', get_option('siteurl').'/wp-admin/options-general.php?page=fotomoto');      
+      define('WP_FOTOMOTO_PLUGIN_ADMIN_URL', site_url().'/wp-admin/options-general.php?page=fotomoto');      
 
 define("FOTOMOTO_ENABLED", "enabled");
 define("FOTOMOTO_DISABLED", "disabled");
@@ -248,6 +248,7 @@ function fotomoto_category_enabled($category_id) {
 function fotomoto_default_options() {
 	$default_options = array();
 	$default_options["store_key"] = "";
+	$default_options["api_mode"] = "";
 	$default_options["enable_multiuser"] = "";
 	$default_options["affiliate_key"] = "";	
   $default_options["api_key"] = "";
@@ -260,8 +261,10 @@ function fotomoto_default_options() {
 
 function fotomoto_set_option($option_name, $option_value) {
 	$fotomoto_options = get_option('fotomoto_options');
-	if (!$fotomoto_options || !array_key_exists($option_name, $fotomoto_options)) {
-		$fotomoto_options = fotomoto_default_options();
+	if (!$fotomoto_options) $fotomoto_options = fotomoto_default_options();
+	if (!array_key_exists($option_name, $fotomoto_options)) {
+	  $options = fotomoto_default_options();
+		$fotomoto_options[$option_name] = $options[$option_name];
 	}
 	$fotomoto_options[$option_name] = $option_value;
 	update_option('fotomoto_options', $fotomoto_options);
@@ -269,14 +272,17 @@ function fotomoto_set_option($option_name, $option_value) {
 
 function fotomoto_get_option($option_name) {
 	$fotomoto_options = get_option('fotomoto_options');
-	if (!$fotomoto_options || !array_key_exists($option_name, $fotomoto_options)) {
-		$fotomoto_options = fotomoto_default_options();
+	if (!$fotomoto_options) $fotomoto_options = fotomoto_default_options();
+	if (!array_key_exists($option_name, $fotomoto_options)) {
+	  $options = fotomoto_default_options();
+		$fotomoto_options[$option_name] = $options[$option_name];
 	}
 	return $fotomoto_options[$option_name];
 }
 
 function fotomoto_save_options() {
   fotomoto_set_option("store_key", trim($_POST["store_key"]));
+  fotomoto_set_option("api_mode", trim($_POST["api_mode"]));
   fotomoto_set_option("enable_multiuser", trim($_POST["enable_multiuser"]));
 	fotomoto_set_option("affiliate_key", trim($_POST["affiliate_key"]));
 	fotomoto_set_option("api_key", trim($_POST["api_key"]));
@@ -300,8 +306,13 @@ function fotomoto_curPageURL() {
 
 function fotomoto_script($key, $ext="") {
 	$url = "http://widget.".FOTOMOTO_PRODUCTION_DOMAIN."/stores/script/" . $key . ".js";
+	$has_ext = false;
 	if ($ext != "") {
+	  $has_ext = true;
 		$url .= "?ext=" . $ext;
+	}
+	if (fotomoto_get_option("api_mode") != "") {
+    $url .= ($has_ext ? "&" : "?")."api=true";
 	}
 	return $url;
 }
@@ -334,7 +345,7 @@ function fotomoto() {
 	if (isset($_GET["fotomoto_debug"])) {
 ?>
 <!--
-VERSION: 1.1.4
+VERSION: 1.1.5
 
 REQUEST URI: <?php echo $_SERVER["REQUEST_URI"] ?>
 

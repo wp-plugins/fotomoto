@@ -28,6 +28,10 @@
       <th scope="row">Fotomoto Site Key:</th>
       <td><input type="text" name="store_key" value="<?php echo fotomoto_get_option('store_key'); ?>" size="48"/></td>
       </tr>
+      <tr valign="top">
+      <th scope="row">Use API Mode:</th>
+      <td class="checkboxes"><label><input type="checkbox" id="api_mode" name="api_mode" value="1" <?php echo (fotomoto_get_option("api_mode") != "" ? "checked" : "") ?>><span>&nbsp;</span></label></td>
+      </tr>
       </table>
       <br/><br/>
 			<h4>If you are an Affiliate User and have a multiuser site to enable Fotomoto, please enter your Affiliate Information. if you can't find your keys, contact us via <a href="mailto:support@fotomoto.com">support@fotomoto.com</a>.</h4>
@@ -189,6 +193,10 @@
       <?php
       global $wp_roles;
       $wp_user_search = new WP_User_Search();
+      $wp_user_search->users_per_page = 1000;
+      $wp_user_search->prepare_query();
+      $wp_user_search->query();
+      
       $style = '';
       foreach ( $wp_user_search->get_results() as $userid ) {      	
         $user_object = new WP_User($userid);
