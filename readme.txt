@@ -4,7 +4,7 @@ Tags: fotomoto, ecommerce, sell, image, photo, picture, affiliate, plugin, print
 Requires at least: 1.5
 Tested up to: 3.2.1
 Stable tag: 3.0.3
-Version: 1.1.5
+Version: 1.1.6
 
 Turns your photoblog, into a online boutique, a fully enabled e-commerce site.
 
@@ -22,6 +22,9 @@ This plugin adds the required javascript for enabling the Fotomoto store on all 
 5. Then under the settings menu select Fotomoto and enter the site key.
 
 == Change Log ==
+
+= Version 1.1.6 =
+* Add support for WordPress MultiUser
 
 = Version 1.1.5 =
 * Add API mode option.

@@ -3,11 +3,11 @@
 Plugin Name: Fotomoto
 Plugin URI: http://www.fotomoto.com
 Description: Fotomoto Plugin
-Version: 1.1.5
+Version: 1.1.6
 Author: Fotomoto
 Author URI: http://www.fotomoto.com/
 */
-define('FOTOMOTO_VERSION', '1.1.5');
+define('FOTOMOTO_VERSION', '1.1.6');
 
 if (!defined('WP_CONTENT_URL'))
       define('WP_CONTENT_URL', site_url().'/wp-content');
@@ -31,9 +31,29 @@ define("FOTOMOTO_CATEGORY_META", "fotomoto_categorymeta");
 define("FOTOMOTO_PRODUCTION_DOMAIN", "fotomoto.com");
 
 global $wpdb;
+
 $wpdb->{FOTOMOTO_CATEGORY_META} = $wpdb->prefix . FOTOMOTO_CATEGORY_META;
 
-$fotomoto_options = get_option('fotomoto_options');
+function fotomoto_wp_get_option() {
+  if(is_multisite()) {  
+    global $blog_id;
+    return get_blog_option($blog_id, 'fotomoto_options');
+  }
+  else {
+    return get_option('fotomoto_options');
+  }
+}
+
+function fotomoto_wp_update_option($options) {
+  if(is_multisite()) {  
+    global $blog_id;
+	  update_blog_option($blog_id, 'fotomoto_options', $options);
+  }
+  else {
+    update_option('fotomoto_options', $options);
+  }
+}
+$fotomoto_options = fotomoto_wp_get_option();
 function activate_fotomoto() {  
 	global $wpdb;
   add_option('fotomoto_options', fotomoto_default_options());    
@@ -48,8 +68,7 @@ function activate_fotomoto() {
 		);";
 		$wpdb->query($sql);
 	}
-	
-	update_option('fotomoto_options', fotomoto_default_options()); //initial default options
+	fotomoto_wp_update_option(fotomoto_default_options());
 }
 
 function deactive_fotomoto() {
@@ -260,18 +279,18 @@ function fotomoto_default_options() {
 }
 
 function fotomoto_set_option($option_name, $option_value) {
-	$fotomoto_options = get_option('fotomoto_options');
+	$fotomoto_options = fotomoto_wp_get_option();
 	if (!$fotomoto_options) $fotomoto_options = fotomoto_default_options();
 	if (!array_key_exists($option_name, $fotomoto_options)) {
 	  $options = fotomoto_default_options();
 		$fotomoto_options[$option_name] = $options[$option_name];
 	}
 	$fotomoto_options[$option_name] = $option_value;
-	update_option('fotomoto_options', $fotomoto_options);
+	fotomoto_wp_update_option($fotomoto_options);
 }
 
 function fotomoto_get_option($option_name) {
-	$fotomoto_options = get_option('fotomoto_options');
+	$fotomoto_options = fotomoto_wp_get_option();
 	if (!$fotomoto_options) $fotomoto_options = fotomoto_default_options();
 	if (!array_key_exists($option_name, $fotomoto_options)) {
 	  $options = fotomoto_default_options();
@@ -345,7 +364,7 @@ function fotomoto() {
 	if (isset($_GET["fotomoto_debug"])) {
 ?>
 <!--
-VERSION: 1.1.5
+VERSION: 1.1.6
 
 REQUEST URI: <?php echo $_SERVER["REQUEST_URI"] ?>
 
