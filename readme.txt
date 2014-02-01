@@ -1,6 +1,6 @@
 === Fotomoto ===
 Contributors: Fotomoto
-Tags: fotomoto, ecommerce, sell, image, photo, picture, affiliate, plugin, print-on-demand, products, revenue sharing, store, storefront, card, ecard, print, canvas, download, share, free
+Tags: fotomoto, ecommerce, sell, image, photo, picture, affiliate, plugin, print-on-demand, products, revenue sharing, store, storefront, card, ecard, print, canvas, download, share, free, bayphoto
 Requires at least: 1.5
 Tested up to: 3.2.1
 Stable tag: 3.0.3
