@@ -2,9 +2,9 @@
 Contributors: Fotomoto
 Tags: fotomoto, ecommerce, sell, image, photo, picture, affiliate, plugin, print-on-demand, products, revenue sharing, store, storefront, card, ecard, print, canvas, download, share, free, bayphoto
 Requires at least: 1.5
-Tested up to: 3.2.1
+Tested up to: 4.1
 Stable tag: 3.0.3
-Version: 1.1.6
+Version: 1.1.7
 
 Turns your photoblog, into a online boutique, a fully enabled e-commerce site.
 
@@ -22,6 +22,9 @@ This plugin adds the required javascript for enabling the Fotomoto store on all 
 5. Then under the settings menu select Fotomoto and enter the site key.
 
 == Change Log ==
+
+= Version 1.1.7 =
+* Testing new compatibility up to WordPress 4.1
 
 = Version 1.1.6 =
 * Add support for WordPress MultiUser
